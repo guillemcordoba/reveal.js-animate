@@ -35,11 +35,12 @@ Animate options:
 - Separate comments
  - Whenever a line includes both non-comment code and a comment, the line is broken into two fragments
 
+- with-ancestors: all parent fragemnts are also visible
 
 ```html
 <section>
 
- <fragment animate="by-line balanced separate-comments">
+ <fragment animate="by-line balanced separate-comments with-ancestors">
 <pre>
 <code class="rust">
 struct Person {
@@ -49,6 +50,14 @@ struct Person {
 </code>
 </pre>
 </fragment>
+
+<section>
+<fragment language="markdown" animate="by-line with-ancestors">
+- point 1
+  - point 1b
+- point 2   
+</fragment>
+</section>
 
 </section>
 ```
