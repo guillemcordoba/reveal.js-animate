@@ -1,11 +1,11 @@
-# reveal.js-animate
+# reveal.js-animate-fragments
 
 A [Reveal.js](https://revealjs.com/) plugin that adds new animations styles
 
 ## Installation
 
 ```bash
-npm i reveal.js-animate
+npm i reveal.js-animate-fragments
 ```
 
 ## Usage
