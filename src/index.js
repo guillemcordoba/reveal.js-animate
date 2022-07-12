@@ -158,6 +158,14 @@ export default () => ({
             /<li>/gm,
             '<li class="fragment fade-in-then-semi-out">'
           );
+          fragment.innerHTML = fragment.innerHTML.replace(
+            /<h3([^>]*)*>/gm,
+            '<h3 $1 class="fragment fade-in">'
+          );
+          fragment.innerHTML = fragment.innerHTML.replace(
+            /<h2>/gm,
+            '<h2 class="fragment fade-in">'
+          );
         } else {
           fragment.innerHTML = fragment.innerHTML.replace(
             /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
