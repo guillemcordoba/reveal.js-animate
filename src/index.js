@@ -20,10 +20,6 @@ export default () => ({
           /}(.*)$/gm,
           "}$1</span>"
         );
-        fragment.innerHTML = fragment.innerHTML.replace(
-          /}(.*)$/gm,
-          "}$1</span>"
-        );
         /* 
         fragment.innerHTML = fragment.innerHTML.replace(
           /\(([^\)])/gm,
