@@ -6,7 +6,7 @@ function nodeHasAnimateValue(node, animateValue) {
 }
 
 export default () => ({
-  id: "animate",
+  id: "animate-fragments",
   init: (deck) => {
     const fragments = document.querySelectorAll("fragment");
 
@@ -20,6 +20,12 @@ export default () => ({
           /}(.*)$/gm,
           "}$1</span>"
         );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /}(.*)$/gm,
+          "}$1</span>"
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(/\/\/(.*)$/gm, '<span class="fragment fade-in">//$1</span>');
+        /* 
         fragment.innerHTML = fragment.innerHTML.replace(
           /\(([^\)])/gm,
           '(<span class="fragment fade-in">$1'
@@ -35,7 +41,8 @@ export default () => ({
         fragment.innerHTML = fragment.innerHTML.replace(
           /\(\)\)/gm,
           "()</span>)"
-        );
+          );
+          */
       }
 
       if (nodeHasAnimateValue(fragment, "by-line")) {
