@@ -32,19 +32,23 @@ Animate options:
 - By-line: splits each line of text (as rendered) from a block of html at the newlines
  - Wraps each line in a separate fragment
 
+- Separate comments
+ - Whenever a line includes both non-comment code and a comment, the line is broken into two fragments
+
+
 ```html
 <section>
 
+ <fragment animate="by-line balanced separate-comments">
 <pre>
 <code class="rust">
-<fragment animate="by-line balanced">
 struct Person {
-  name: String,
+  name: String, // Comment!
   age: u32
 }
-</fragment>
 </code>
 </pre>
+</fragment>
 
 </section>
 ```

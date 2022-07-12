@@ -24,7 +24,6 @@ export default () => ({
           /}(.*)$/gm,
           "}$1</span>"
         );
-        fragment.innerHTML = fragment.innerHTML.replace(/\/\/(.*)$/gm, '<span class="fragment fade-in">//$1</span>');
         /* 
         fragment.innerHTML = fragment.innerHTML.replace(
           /\(([^\)])/gm,
@@ -43,6 +42,10 @@ export default () => ({
           "()</span>)"
           );
           */
+      }
+
+      if (nodeHasAnimateValue(fragment, "separate-comments")) {
+        fragment.innerHTML = fragment.innerHTML.replace(/\/\/(.*)$/gm, '<span class="fragment fade-in">//$1</span>');
       }
 
       if (nodeHasAnimateValue(fragment, "by-line")) {
