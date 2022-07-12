@@ -1,30 +1,49 @@
+function nodeHasAnimateValue(node, animateValue) {
+  return (
+    node.attributes.animate &&
+    node.attributes.animate.nodeValue.split(" ").includes(animateValue)
+  );
+}
+
 export default () => ({
   id: "animate",
   init: (deck) => {
-    const codes = document.querySelectorAll(".balanced");
+    const fragments = document.querySelectorAll("fragment");
 
-    for (const code of codes) {
-      code.innerHTML = code.innerHTML.replace(
-        /^(.*){(.*)$/gm,
-        '<span class="fragment fade-in">$1{$2'
-      );
-      code.innerHTML = code.innerHTML.replace(/}(.*)$/gm, "}$1</span>");
-      code.innerHTML = code.innerHTML.replace(
-        /\(([^\)])/gm,
-        '(<span class="fragment fade-in">$1'
-      );
-      code.innerHTML = code.innerHTML.replace(/([^\(\)])\)([^\)])/gm, "$1</span>)$2");
-      code.innerHTML = code.innerHTML.replace(/([^\(])\)\)/gm, "$1</span>)</span>)");
-      code.innerHTML = code.innerHTML.replace(/\(\)\)/gm, "()</span>)");
-    }
+    for (const fragment of fragments) {
+      if (nodeHasAnimateValue(fragment, "balanced")) {
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /^(.*){(.*)$/gm,
+          '<span class="fragment fade-in">$1{$2'
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /}(.*)$/gm,
+          "}$1</span>"
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /\(([^\)])/gm,
+          '(<span class="fragment fade-in">$1'
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /([^\(\)])\)([^\)])/gm,
+          "$1</span>)$2"
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /([^\(])\)\)/gm,
+          "$1</span>)</span>)"
+        );
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /\(\)\)/gm,
+          "()</span>)"
+        );
+      }
 
-    const byLines = document.querySelectorAll(".by-line");
-
-    for (const byLine of byLines) {
-      byLine.innerHTML = byLine.innerHTML.replace(
-        /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
-        '<span class="fragment fade-in">$1</span>'
-      );
+      if (nodeHasAnimateValue(fragment, "by-line")) {
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
+          '<span class="fragment fade-in">$1</span>'
+        );
+      }
     }
   },
 });

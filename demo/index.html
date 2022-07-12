@@ -59,13 +59,14 @@
       <div class="slides">
         <section>
           <pre>
-<code class="rust balanced by-line">
+<code >
+<fragment animate="balanced by-line">
 
   struct Person {
       name: String,
       age: u32
   }
-  
+
   let p = Person {
       name: String::from(""),
       age: 0
@@ -240,7 +241,9 @@ fn find_empty_position(map: &[[GameCell; MAP_HEIGHT]; MAP_WIDTH]) -> Option&lt;P
             return Some(Position { x, y });
         }
     }
-}</code>
+}
+</fragment>
+</code>
 </pre>
         </section>
       </div>

@@ -1,6 +1,6 @@
 # reveal.js-animate
 
-A [Reveal.js](https://revealjs.com/) plugin to eliminate line breaks in &lt;pre&gt; tags in lines that don't contain anything other than an html tag.
+A [Reveal.js](https://revealjs.com/) plugin that adds new animations styles
 
 ## Installation
 
@@ -13,52 +13,38 @@ npm i reveal.js-animate
 Add the plugin:
 
 ```html
-  <script type="module">
-    import RevealAnimate from "reveal.js-animate";
+<script type="module">
+  import RevealAnimate from "reveal.js-animate";
 
-    import Reveal from "reveal.js";
+  import Reveal from "reveal.js";
 
-    let deck = new Reveal({
-      plugins: [RevealAnimate],
-    });
-    deck.initialize();
-  </script>
+  let deck = new Reveal({
+    plugins: [RevealAnimate],
+  });
+  deck.initialize();
+</script>
 ```
 
-Now you can write this HTML (much easier to read): 
+Animate options:
+
+- Balanced: whenever an opening delimiter is encountered, add the fragment with the balanced closing delimiter to the same animation fragment set as its corresponding opening line.
+
+- By-line: splits each line of text (as rendered) from a block of html at the newlines
+ - Wraps each line in a separate fragment
 
 ```html
 <section>
 
 <pre>
 <code class="rust">
-<span class="fragment fade-in">
+<fragment animate="by-line balanced">
 struct Person {
-  <span class="fragment fade-in">
   name: String,
   age: u32
-  </span>
 }
-</span>
-<span class="fragment fade-in">
-struct C;
-</span>
+</fragment>
 </code>
 </pre>
-
-</section>
-```
-
-And it would be rendered like this:
-
-```html
-<section>
-
-<pre><code class="rust"><span class="fragment fade-in visible" data-fragment-index="0">struct Person {
-<span class="fragment fade-in visible" data-fragment-index="1">  name: String,
-  age: u32</span>
-}</span>
-<span class="fragment fade-in visible current-fragment" data-fragment-index="2">struct C;</span></code></pre>
 
 </section>
 ```

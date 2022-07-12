@@ -1,9 +1,9 @@
 {
   "name": "reveal.js-animate",
-  "description": "Webcomponent reveal.js-eliminate-empty-lines following open-wc recommendations",
+  "description": "Webcomponent reveal.js-animate following open-wc recommendations",
   "license": "MIT",
-  "author": "reveal.js-eliminate-empty-lines",
-  "version": "0.0.2",
+  "author": "reveal.js-animate",
+  "version": "0.0.1",
   "main": "src/index.js",
   "module": "src/index.js",
   "scripts": {
