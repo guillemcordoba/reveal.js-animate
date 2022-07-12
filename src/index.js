@@ -1,4 +1,4 @@
-import RevealMarkdown from "reveal.js/plugin/markdown/markdown.esm.js";
+import { marked } from "marked";
 
 function nodeHasLanguageValue(node, value) {
   return (
@@ -63,9 +63,10 @@ export default () => ({
   id: "animate-fragments",
   init: async (deck) => {
     deck.on("fragmentshown", (event) => {
+      const parents = getParents(event.fragment.parentNode)
       if (
-        !getParents(event.fragment.parentNode).some((p) =>
-          nodeHasAnimateValue(p, "with-ancestors")
+        !parents.some((p) =>
+          nodeHasAnimateValue(p, "with-ancestry")
         )
       )
         return;
@@ -77,7 +78,7 @@ export default () => ({
       if (!currentFragment) return;
       if (
         !getParents(event.fragment.parentNode).some((p) =>
-          nodeHasAnimateValue(p, "with-ancestors")
+          nodeHasAnimateValue(p, "with-ancestry")
         )
       )
         return;
@@ -89,13 +90,30 @@ export default () => ({
 
     for (const fragment of fragments) {
       if (nodeHasLanguageValue(fragment, "markdown")) {
-        fragment.innerHTML = `<section data-markdown>
-        <textarea data-template>
-        ${fragment.innerHTML}
-        </textarea>
-        </section>
-        `;
-        await RevealMarkdown().init(deck);
+        const lines = fragment.innerHTML.split("\n");
+
+        const isEmptyLine = (line) => line.match(/[^\W]/gm);
+
+        const countWhitespaces = (line) => line.search(/[^\ \t]/gm);
+
+        const minWhitespaces = lines
+          .filter(isEmptyLine)
+          .map(countWhitespaces)
+          .reduce((acc, next) => (acc > next ? next : acc), 1000);
+
+        const leadingWhitespacesString = Array(minWhitespaces).fill(" ").join('');
+
+        const leadingWhitespaces = new RegExp(
+          `^${leadingWhitespacesString}`,
+          "gm"
+        );
+
+        const removeLeadingWhitespaces = (line) =>
+          line.replace(leadingWhitespaces, "");
+
+        fragment.innerHTML = lines.map(removeLeadingWhitespaces).join("\n");
+
+        fragment.innerHTML = marked.parse(fragment.innerHTML);
       }
 
       if (nodeHasAnimateValue(fragment, "balanced")) {
