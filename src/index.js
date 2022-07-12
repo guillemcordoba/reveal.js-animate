@@ -1,3 +1,11 @@
+import RevealMarkdown from "reveal.js/plugin/markdown/markdown.esm.js";
+
+function nodeHasLanguageValue(node, value) {
+  return (
+    node.attributes.language && node.attributes.language.nodeValue === value
+  );
+}
+
 function nodeHasAnimateValue(node, animateValue) {
   return (
     node.attributes.animate &&
@@ -5,12 +13,91 @@ function nodeHasAnimateValue(node, animateValue) {
   );
 }
 
+function getParents(elem) {
+  // Set up a parent array
+  var parents = [];
+
+  // Push each parent element to the array
+  for (; elem && elem !== document; elem = elem.parentNode) {
+    parents.push(elem);
+  }
+
+  // Return our parent array
+  return parents;
+}
+
+function hasClass(elem, clas) {
+  return elem.classList.contains(clas);
+}
+
+function addFragmentToParents(elem) {
+  // event.fragment = the fragment DOM element
+  const parentFragments = getParents(elem).filter((e) =>
+    hasClass(e, "fragment")
+  );
+  for (const el of parentFragments) {
+    el.classList.add("current-fragment");
+  }
+}
+
+function getCurrentFragment() {
+  const currentFragmentEls = document.querySelectorAll(".current-fragment");
+
+  let highestIndex = 0;
+  let currentFragment = undefined;
+
+  for (const el of currentFragmentEls) {
+    if (
+      el.hasAttribute("data-fragment-index") &&
+      parseInt(el.attributes["data-fragment-index"].value) > highestIndex
+    ) {
+      currentFragment = el;
+      highestIndex = parseInt(el.attributes["data-fragment-index"].value);
+    }
+  }
+
+  return currentFragment;
+}
+
 export default () => ({
   id: "animate-fragments",
-  init: (deck) => {
+  init: async (deck) => {
+    deck.on("fragmentshown", (event) => {
+      if (
+        !getParents(event.fragment.parentNode).some((p) =>
+          nodeHasAnimateValue(p, "with-ancestors")
+        )
+      )
+        return;
+
+      addFragmentToParents(event.fragment.parentNode);
+    });
+    deck.on("fragmenthidden", (event) => {
+      const currentFragment = getCurrentFragment();
+      if (!currentFragment) return;
+      if (
+        !getParents(event.fragment.parentNode).some((p) =>
+          nodeHasAnimateValue(p, "with-ancestors")
+        )
+      )
+        return;
+
+      addFragmentToParents(currentFragment);
+    });
+
     const fragments = document.querySelectorAll("fragment");
 
     for (const fragment of fragments) {
+      if (nodeHasLanguageValue(fragment, "markdown")) {
+        fragment.innerHTML = `<section data-markdown>
+        <textarea data-template>
+        ${fragment.innerHTML}
+        </textarea>
+        </section>
+        `;
+        await RevealMarkdown().init(deck);
+      }
+
       if (nodeHasAnimateValue(fragment, "balanced")) {
         fragment.innerHTML = fragment.innerHTML.replace(
           /^(.*){(.*)$/gm,
@@ -41,15 +128,34 @@ export default () => ({
       }
 
       if (nodeHasAnimateValue(fragment, "separate-comments")) {
-        fragment.innerHTML = fragment.innerHTML.replace(/\/\/(.*)$/gm, '<span class="fragment fade-in">//$1</span>');
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /\/\/(.*)$/gm,
+          '<span class="fragment fade-in">//$1</span>'
+        );
       }
 
       if (nodeHasAnimateValue(fragment, "by-line")) {
-        fragment.innerHTML = fragment.innerHTML.replace(
-          /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
-          '<span class="fragment fade-in">$1</span>'
-        );
+        if (nodeHasLanguageValue(fragment, "markdown")) {
+          fragment.innerHTML = fragment.innerHTML.replace(
+            /<li>/gm,
+            '<li class="fragment fade-in-then-semi-out">'
+          );
+        } else {
+          fragment.innerHTML = fragment.innerHTML.replace(
+            /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
+            '<span class="fragment fade-in">$1</span>'
+          );
+        }
       }
+    }
+
+    for (const fragment of fragments) {
+      /*  if (isNodeLanguageMarkdown(fragment)) {
+        fragment.innerHTML = fragment.innerHTML.replace(
+          /<li>/gm,
+          '<li class="fragment fade-in-then-semi-out">'
+        );
+      } */
     }
   },
 });

@@ -58,6 +58,13 @@
     <div class="reveal">
       <div class="slides">
         <section>
+<fragment language="markdown" animate="by-line with-ancestors">
+- point 1
+  - point 1b
+- point 2   
+</fragment>
+        </section>
+        <section>
           <pre>
 <code >
 <fragment animate="balanced by-line">
@@ -249,12 +256,12 @@ fn find_empty_position(map: &[[GameCell; MAP_HEIGHT]; MAP_WIDTH]) -> Option&lt;P
       </div>
     </div>
     <script type="module">
-      import RevealFragmentsRust from "../src/index.js";
+      import RevealAnimateFragments from "../src/index.js";
 
       import Reveal from "reveal.js";
 
       let deck = new Reveal({
-        plugins: [RevealFragmentsRust],
+        plugins: [RevealAnimateFragments],
       });
       deck.initialize();
     </script>
