@@ -14,7 +14,7 @@ Add the plugin:
 
 ```html
 <script type="module">
-  import RevealAnimate from "reveal.js-animate";
+  import RevealAnimate from "reveal.js-animate-fragments";
 
   import Reveal from "reveal.js";
 
