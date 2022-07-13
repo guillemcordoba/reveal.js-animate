@@ -166,6 +166,10 @@ export default () => ({
             '<li class="fragment fade-in-then-semi-out">'
           );
           animateElement.innerHTML = animateElement.innerHTML.replace(
+            /<h4([^>]*)*>/gm,
+            '<h4 $1 class="fragment fade-in">'
+          );
+          animateElement.innerHTML = animateElement.innerHTML.replace(
             /<h3([^>]*)*>/gm,
             '<h3 $1 class="fragment fade-in">'
           );
