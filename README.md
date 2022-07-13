@@ -38,9 +38,7 @@ Animate options:
 - with-ancestry: all parent fragemnts are also visible
 
 ```html
-<section>
-
- <fragment animate="by-line balanced separate-comments with-ancestry">
+<section animate="by-line balanced separate-comments with-ancestry">
 <pre>
 <code class="rust">
 struct Person {
@@ -49,15 +47,11 @@ struct Person {
 }
 </code>
 </pre>
-</fragment>
+</section>
 
-<section>
-<fragment language="markdown" animate="by-line with-ancestry">
+<section language="markdown" animate="by-line with-ancestry">
 - point 1
   - point 1b
 - point 2   
-</fragment>
-</section>
-
 </section>
 ```

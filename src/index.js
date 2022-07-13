@@ -86,42 +86,44 @@ export default () => ({
       addFragmentToParents(currentFragment);
     });
 
-    const fragments = document.querySelectorAll("fragment");
+    const markdownElements = document.querySelectorAll('[language="markdown"]');
 
-    for (const fragment of fragments) {
-      if (nodeHasLanguageValue(fragment, "markdown")) {
-        const lines = fragment.innerHTML.split("\n");
+    for (const markdownElement of markdownElements) {
+      const lines = markdownElement.innerHTML.split("\n");
 
-        const isEmptyLine = (line) => line.match(/[^\W]/gm);
+      const isEmptyLine = (line) => line.match(/[^\W]/gm);
 
-        const countWhitespaces = (line) => line.search(/[^\ \t]/gm);
+      const countWhitespaces = (line) => line.search(/[^\ \t]/gm);
 
-        const minWhitespaces = lines
-          .filter(isEmptyLine)
-          .map(countWhitespaces)
-          .reduce((acc, next) => (acc > next ? next : acc), 1000);
+      const minWhitespaces = lines
+        .filter(isEmptyLine)
+        .map(countWhitespaces)
+        .reduce((acc, next) => (acc > next ? next : acc), 1000);
 
-        const leadingWhitespacesString = Array(minWhitespaces).fill(" ").join('');
+      const leadingWhitespacesString = Array(minWhitespaces).fill(" ").join('');
 
-        const leadingWhitespaces = new RegExp(
-          `^${leadingWhitespacesString}`,
-          "gm"
-        );
+      const leadingWhitespaces = new RegExp(
+        `^${leadingWhitespacesString}`,
+        "gm"
+      );
 
-        const removeLeadingWhitespaces = (line) =>
-          line.replace(leadingWhitespaces, "");
+      const removeLeadingWhitespaces = (line) =>
+        line.replace(leadingWhitespaces, "");
 
-        fragment.innerHTML = lines.map(removeLeadingWhitespaces).join("\n");
+      markdownElement.innerHTML = lines.map(removeLeadingWhitespaces).join("\n");
 
-        fragment.innerHTML = marked.parse(fragment.innerHTML);
-      }
+      markdownElement.innerHTML = marked.parse(markdownElement.innerHTML);
+    }
 
-      if (nodeHasAnimateValue(fragment, "balanced")) {
-        fragment.innerHTML = fragment.innerHTML.replace(
+    const animateElements = document.querySelectorAll('[animate]');
+
+    for (const animateElement of animateElements) {
+      if (nodeHasAnimateValue(animateElement, "balanced")) {
+        animateElement.innerHTML = animateElement.innerHTML.replace(
           /^(.*){(.*)$/gm,
           '<span class="fragment fade-in">$1{$2'
         );
-        fragment.innerHTML = fragment.innerHTML.replace(
+        animateElement.innerHTML = animateElement.innerHTML.replace(
           /}(.*)$/gm,
           "}$1</span>"
         );
@@ -145,43 +147,34 @@ export default () => ({
           */
       }
 
-      if (nodeHasAnimateValue(fragment, "separate-comments")) {
-        fragment.innerHTML = fragment.innerHTML.replace(
+      if (nodeHasAnimateValue(animateElement, "separate-comments")) {
+        animateElement.innerHTML = animateElement.innerHTML.replace(
           /\/\/(.*)$/gm,
           '<span class="fragment fade-in">//$1</span>'
         );
       }
 
-      if (nodeHasAnimateValue(fragment, "by-line")) {
-        if (nodeHasLanguageValue(fragment, "markdown")) {
-          fragment.innerHTML = fragment.innerHTML.replace(
+      if (nodeHasAnimateValue(animateElement, "by-line")) {
+        if (nodeHasLanguageValue(animateElement, "markdown")) {
+          animateElement.innerHTML = animateElement.innerHTML.replace(
             /<li>/gm,
             '<li class="fragment fade-in-then-semi-out">'
           );
-          fragment.innerHTML = fragment.innerHTML.replace(
+          animateElement.innerHTML = animateElement.innerHTML.replace(
             /<h3([^>]*)*>/gm,
             '<h3 $1 class="fragment fade-in">'
           );
-          fragment.innerHTML = fragment.innerHTML.replace(
+          animateElement.innerHTML = animateElement.innerHTML.replace(
             /<h2>/gm,
             '<h2 class="fragment fade-in">'
           );
         } else {
-          fragment.innerHTML = fragment.innerHTML.replace(
+          animateElement.innerHTML = animateElement.innerHTML.replace(
             /^(\ *(?:[^{} \n]+) *[^{}\n]*)$/gm,
             '<span class="fragment fade-in">$1</span>'
           );
         }
       }
-    }
-
-    for (const fragment of fragments) {
-      /*  if (isNodeLanguageMarkdown(fragment)) {
-        fragment.innerHTML = fragment.innerHTML.replace(
-          /<li>/gm,
-          '<li class="fragment fade-in-then-semi-out">'
-        );
-      } */
     }
   },
 });
