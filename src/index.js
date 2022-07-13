@@ -89,6 +89,11 @@ export default () => ({
     const markdownElements = document.querySelectorAll('[language="markdown"]');
 
     for (const markdownElement of markdownElements) {
+      markdownElement.innerHTML = markdownElement.innerHTML.replace(
+        /<li([^>]*)>/gm,
+        '<li data-marker $1>'
+      );
+
       const lines = markdownElement.innerHTML.split("\n");
 
       const isEmptyLine = (line) => line.match(/[^\W]/gm);
